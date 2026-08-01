@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A New York Engagement — Cris &amp; Caroline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --marquee-red:#C0243A;
+    --marquee-red-dim:#7d1727;
+    --ink-navy:#141B33;
+    --ink-navy-2:#1E294A;
+    --gold:#D9A94E;
+    --gold-dim:#9c7a34;
+    --paper:#F2ECDF;
+    --paper-2:#E9E1CE;
+    --charcoal:#221F1B;
+    --charcoal-soft:#5a5348;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--ink-navy);
+    color:var(--paper);
+    font-family:'Work Sans',sans-serif;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- bulb marquee frame ---------- */
+  .bulb-strip{
+    position:fixed;
+    left:0;right:0;
+    display:flex;
+    justify-content:space-evenly;
+    padding:10px 0;
+    z-index:50;
+    pointer-events:none;
+  }
+  .bulb-strip.top{top:0;}
+  .bulb-strip.bottom{bottom:0;}
+  .bulb{
+    width:7px;height:7px;
+    border-radius:50%;
+    background:var(--gold-dim);
+    box-shadow:0 0 2px rgba(217,169,78,.3);
+    animation:twinkle 2.6s infinite ease-in-out;
+  }
+  @keyframes twinkle{
+    0%,100%{background:var(--gold-dim);box-shadow:0 0 2px rgba(217,169,78,.2);}
+    50%{background:var(--gold);box-shadow:0 0 8px 2px rgba(217,169,78,.85);}
+  }
+  .bulb:nth-child(odd){animation-delay:0s;}
+  .bulb:nth-child(even){animation-delay:1.3s;}
+  .bulb:nth-child(3n){animation-delay:.7s;}
+
+  /* ---------- app frame ---------- */
+  .stage{
+    position:relative;
+    width:100%;height:100%;
+    padding:34px 0;
+  }
+  .pages{
+    position:relative;
+    height:100%;
+    width:100%;
+  }
+  .page{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:6px 22px 90px;
+    overflow-y:auto;
+    opacity:0;
+    transform:translateY(14px);
+    pointer-events:none;
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .page.active{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .page::-webkit-scrollbar{width:0;}
+
+  /* ---------- cover page ---------- */
+  #p0{justify-content:center;text-align:center;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.35em;
+    font-size:11px;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .cover-title{
+    font-family:'Abril Fatface',serif;
+    font-size:52px;
+    line-height:1.05;
+    color:var(--paper);
+    text-shadow:0 0 24px rgba(217,169,78,.25);
+    margin-bottom:8px;
+  }
+  .cover-title span{color:var(--marquee-red);}
+  .cover-sub{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:19px;
+    color:var(--gold);
+    margin-bottom:26px;
+  }
+  .marquee-rule{
+    width:120px;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    margin:0 auto 26px;
+  }
+  .cast-block{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--paper-2);
+    line-height:2;
+    margin-bottom:34px;
+  }
+  .cast-block b{color:var(--paper);letter-spacing:.05em;}
+  .venue-line{
+    font-family:'Work Sans',sans-serif;
+    font-weight:300;
+    font-size:14px;
+    color:var(--paper-2);
+    letter-spacing:.03em;
+  }
+  .starttour{
+    margin-top:36px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-navy);
+    background:var(--gold);
+    border:none;
+    padding:13px 30px;
+    border-radius:2px;
+    cursor:pointer;
+    box-shadow:0 0 0 1px rgba(0,0,0,.15) inset, 0 6px 18px rgba(0,0,0,.35);
+  }
+
+  /* ---------- day pages ---------- */
+  .ticket{
+    width:100%;
+    max-width:460px;
+    background:var(--paper);
+    color:var(--charcoal);
+    border-radius:4px;
+    position:relative;
+    box-shadow:0 20px 45px rgba(0,0,0,.45);
+    margin-top:8px;
+  }
+  .ticket-head{
+    background:var(--marquee-red);
+    color:var(--paper);
+    padding:20px 22px 16px;
+    border-radius:4px 4px 0 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .ticket-head::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:8px;
+    background:repeating-linear-gradient(90deg,var(--gold) 0 6px, transparent 6px 12px);
+    opacity:.55;
+  }
+  .day-eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .day-title{
+    font-family:'Abril Fatface',serif;
+    font-size:30px;
+    margin-top:6px;
+    line-height:1.1;
+  }
+  .day-date{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:14px;
+    color:var(--paper-2);
+    margin-top:4px;
+  }
+
+  .perf{
+    height:0;
+    border-top:2px dashed var(--charcoal-soft);
+    opacity:.35;
+    margin:0 22px;
+  }
+
+  .acts{
+    padding:18px 22px 8px;
+  }
+  .act{
+    display:flex;
+    gap:14px;
+    padding:14px 0;
+    border-bottom:1px solid rgba(34,31,27,.09);
+  }
+  .act:last-child{border-bottom:none;}
+  .act-time{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--marquee-red);
+    min-width:64px;
+    padding-top:2px;
+    letter-spacing:.02em;
+  }
+  .act-body b{
+    font-family:'Playfair Display',serif;
+    font-weight:700;
+    font-size:15.5px;
+    display:block;
+    margin-bottom:2px;
+  }
+  .act-body span{
+    font-size:13px;
+    color:var(--charcoal-soft);
+    line-height:1.45;
+    display:block;
+  }
+  .tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--gold-dim);
+    border:1px solid var(--gold-dim);
+    padding:1px 6px;
+    border-radius:10px;
+    margin-top:6px;
+  }
+
+  .ticket-foot{
+    padding:14px 22px 20px;
+    text-align:center;
+  }
+  .stub-note{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--charcoal-soft);
+  }
+
+  /* ---------- nav ---------- */
+  .navbar{
+    position:fixed;
+    bottom:22px;left:0;right:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:16px;
+    z-index:60;
+  }
+  .arrow{
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1px solid var(--gold-dim);
+    background:rgba(20,27,51,.7);
+    color:var(--gold);
+    font-size:15px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    backdrop-filter:blur(4px);
+  }
+  .dots{display:flex;gap:9px;}
+  .dot{
+    width:8px;height:8px;
+    border-radius:50%;
+    background:rgba(217,169,78,.25);
+    cursor:pointer;
+    transition:all .3s ease;
+  }
+  .dot.on{
+    background:var(--gold);
+    box-shadow:0 0 8px 2px rgba(217,169,78,.7);
+    transform:scale(1.15);
+  }
+
+  @media(min-width:600px){
+    .cover-title{font-size:64px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bulb-strip top">
+  <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+  <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+  <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+</div>
+
+<div class="stage">
+  <div class="pages">
+
+    <!-- COVER -->
+    <div class="page active" id="p0">
+      <div class="eyebrow">Now Playing · August 2026</div>
+      <div class="cover-title">A New York<br><span>Engagement</span></div>
+      <div class="cover-sub">Four Nights, One City, No Understudies</div>
+      <div class="marquee-rule"></div>
+      <div class="cast-block">
+        <b>STARRING</b> Cris &amp; Caroline<br>
+        <b>VENUE</b> New York, NY<br>
+        <b>RUN</b> Aug 26 – Aug 29, 2026
+      </div>
+      <div class="venue-line">Doubletree Midtown · United 1999 / 1250</div>
+      <button class="starttour" onclick="go(1)">Raise the Curtain →</button>
+    </div>
+
+    <!-- WEDNESDAY -->
+    <div class="page" id="p1">
+      <div class="ticket">
+        <div class="ticket-head">
+          <div class="day-eyebrow">Act I</div>
+          <div class="day-title">Arrival Night</div>
+          <div class="day-date">Wednesday, August 26</div>
+        </div>
+        <div class="acts">
+          <div class="act">
+            <div class="act-time">10:48 AM</div>
+            <div class="act-body">
+              <b>Touch Down, EWR</b>
+              <span>AirTrain → NJ Transit → Penn Station, arriving roughly 12:00–12:15pm.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Midday</div>
+            <div class="act-body">
+              <b>Check In &amp; Breathe</b>
+              <span>Doubletree Midtown. Free afternoon — no plans on purpose.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">5:00 PM</div>
+            <div class="act-body">
+              <b>Dinner, Somewhere Easy</b>
+              <span>Early bite near the hotel, no rush before the show.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">7:00 PM</div>
+            <div class="act-body">
+              <b>Judah Mantell — Live</b>
+              <span>Mentalism just off Broadway. Curtain 7–7:30pm.</span>
+              <span class="tag">Headliner</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Late</div>
+            <div class="act-body">
+              <b>Old Town Bar</b>
+              <span>Nightcap. Dark wood, strong pours, open since 1892.</span>
+            </div>
+          </div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-foot"><span class="stub-note">Admit Two · No Refunds · No Regrets</span></div>
+      </div>
+    </div>
+
+    <!-- THURSDAY -->
+    <div class="page" id="p2">
+      <div class="ticket">
+        <div class="ticket-head">
+          <div class="day-eyebrow">Act II</div>
+          <div class="day-title">Sky &amp; Harbor</div>
+          <div class="day-date">Thursday, August 27</div>
+        </div>
+        <div class="acts">
+          <div class="act">
+            <div class="act-time">Morning</div>
+            <div class="act-body">
+              <b>American Museum of Natural History</b>
+              <span>Rose Center for Earth &amp; Space, Hayden Planetarium.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Lunch</div>
+            <div class="act-body">
+              <b>John's of Times Square</b>
+              <span>Sit-down pizza, no wait if you beat the dinner rush.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">7:00 PM</div>
+            <div class="act-body">
+              <b>Circle Line — Harbor Lights</b>
+              <span>Pier 83. Two hours on the water as the skyline lights up.</span>
+              <span class="tag">On the Water</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Late</div>
+            <div class="act-body">
+              <b>Comedy Cellar</b>
+              <span>West Village basement room. Late set, standby list opens an hour early.</span>
+            </div>
+          </div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-foot"><span class="stub-note">Admit Two · No Refunds · No Regrets</span></div>
+      </div>
+    </div>
+
+    <!-- FRIDAY -->
+    <div class="page" id="p3">
+      <div class="ticket">
+        <div class="ticket-head">
+          <div class="day-eyebrow">Act III</div>
+          <div class="day-title">West Side Story</div>
+          <div class="day-date">Friday, August 28</div>
+        </div>
+        <div class="acts">
+          <div class="act">
+            <div class="act-time">Morning</div>
+            <div class="act-body">
+              <b>Intrepid Sea, Air &amp; Space Museum</b>
+              <span>Aircraft carrier on the Hudson, plus the space shuttle pavilion.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Afternoon</div>
+            <div class="act-body">
+              <b>Open</b>
+              <span>Chelsea or Meatpacking, whichever way the wind blows.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Dusk</div>
+            <div class="act-body">
+              <b>The High Line</b>
+              <span>Walk it end to end as the city lights come on.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Evening</div>
+            <div class="act-body">
+              <b>Le Bain</b>
+              <span>One or two, at The Standard. In and out before it turns into a scene.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Dinner</div>
+            <div class="act-body">
+              <b>Rubirosa</b>
+              <span>Nolita. The reason you save room.</span>
+              <span class="tag">Closer</span>
+            </div>
+          </div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-foot"><span class="stub-note">Admit Two · No Refunds · No Regrets</span></div>
+      </div>
+    </div>
+
+    <!-- SATURDAY -->
+    <div class="page" id="p4">
+      <div class="ticket">
+        <div class="ticket-head">
+          <div class="day-eyebrow">Finale</div>
+          <div class="day-title">Curtain Call</div>
+          <div class="day-date">Saturday, August 29</div>
+        </div>
+        <div class="acts">
+          <div class="act">
+            <div class="act-time">Morning</div>
+            <div class="act-body">
+              <b>Open</b>
+              <span>Sleep in. There's nowhere to be yet.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">10:30 AM</div>
+            <div class="act-body">
+              <b>Katz's Delicatessen</b>
+              <span>Lower East Side. The last great meal of the trip.</span>
+              <span class="tag">Encore</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">2:00 PM</div>
+            <div class="act-body">
+              <b>Depart Hotel</b>
+              <span>Walk or cab to Penn Station.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">2:30 PM</div>
+            <div class="act-body">
+              <b>NJ Transit → EWR</b>
+              <span>AirTrain to terminal, aiming to land by 3:30–4:00pm.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">6:55 PM</div>
+            <div class="act-body">
+              <b>UA 1250 — Wheels Up</b>
+              <span>Newark → Tampa. House lights down.</span>
+            </div>
+          </div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-foot"><span class="stub-note">Thank You For Joining Us</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="bulb-strip bottom" style="bottom:58px;">
+  <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+  <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+  <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+</div>
+
+<div class="navbar">
+  <div class="arrow" onclick="go(current-1)">‹</div>
+  <div class="dots">
+    <div class="dot" data-i="0" onclick="go(0)"></div>
+    <div class="dot" data-i="1" onclick="go(1)"></div>
+    <div class="dot" data-i="2" onclick="go(2)"></div>
+    <div class="dot" data-i="3" onclick="go(3)"></div>
+    <div class="dot" data-i="4" onclick="go(4)"></div>
+  </div>
+  <div class="arrow" onclick="go(current+1)">›</div>
+</div>
+
+<script>
+  let current = 0;
+  const total = 5;
+  function go(n){
+    if(n<0) n=0;
+    if(n>total-1) n=total-1;
+    document.querySelectorAll('.page').forEach((p,i)=>{
+      p.classList.toggle('active', i===n);
+    });
+    document.querySelectorAll('.dot').forEach((d,i)=>{
+      d.classList.toggle('on', i===n);
+    });
+    current = n;
+  }
+  document.querySelectorAll('.dot')[0].classList.add('on');
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e=>{ touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if(Math.abs(dx) > 60){ dx < 0 ? go(current+1) : go(current-1); }
+  });
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight') go(current+1);
+    if(e.key==='ArrowLeft') go(current-1);
+  });
+</script>
+
+</body>
+</html>
