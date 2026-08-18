@@ -644,7 +644,17 @@
 <script>
   let current = 0;
   const total = 6;
-  function go(n){
+
+  // page index -> actual trip date (year, month(0-based), day)
+  const TRIP_DATES = {
+    1: new Date(2026, 7, 26), // Wed - Arrival Night
+    2: new Date(2026, 7, 27), // Thu - Sky & Harbor
+    3: new Date(2026, 7, 28), // Fri - West Side Story
+    4: new Date(2026, 7, 29), // Sat - Curtain Call
+  };
+  const HASH_MAP = ['cover','wed','thu','fri','sat','bookings'];
+
+  function go(n, updateHash=true){
     if(n<0) n=0;
     if(n>total-1) n=total-1;
     document.querySelectorAll('.page').forEach((p,i)=>{
@@ -654,8 +664,32 @@
       d.classList.toggle('on', i===n);
     });
     current = n;
+    if(updateHash){
+      history.replaceState(null, '', '#' + HASH_MAP[n]);
+    }
   }
-  document.querySelectorAll('.dot')[0].classList.add('on');
+
+  function pageFromHash(){
+    const h = location.hash.replace('#','').toLowerCase();
+    const idx = HASH_MAP.indexOf(h);
+    return idx >= 0 ? idx : null;
+  }
+
+  function pageFromToday(){
+    const today = new Date();
+    const todayKey = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+    for(const [pageIdx, tripDate] of Object.entries(TRIP_DATES)){
+      if(tripDate.getTime() === todayKey) return parseInt(pageIdx);
+    }
+    return null;
+  }
+
+  // Priority: explicit hash in URL (so refresh stays put) > today's date if mid-trip > cover page
+  (function init(){
+    const fromHash = pageFromHash();
+    const startPage = (fromHash !== null) ? fromHash : (pageFromToday() ?? 0);
+    go(startPage, fromHash === null); // only rewrite the hash if we didn't already have one
+  })();
 
   let touchStartX = 0;
   document.addEventListener('touchstart', e=>{ touchStartX = e.changedTouches[0].screenX; });
