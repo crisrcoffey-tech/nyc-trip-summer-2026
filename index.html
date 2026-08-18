@@ -307,6 +307,33 @@
 
   .ticket{max-width:min(460px, 92vw);}
 
+  .qr-row{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .qr-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    background:#fff;
+    padding:8px;
+    border-radius:6px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+  }
+  .qr-card img{
+    width:120px;height:120px;
+    display:block;
+  }
+  .qr-card span{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    color:var(--charcoal-soft);
+    letter-spacing:.03em;
+  }
+
   @media(max-height:640px){
     .ticket-head{padding:14px 20px 12px;}
     .act{padding:10px 0;}
@@ -552,6 +579,54 @@
       </div>
     </div>
 
+    <!-- BOOKINGS -->
+    <div class="page" id="p5">
+      <div class="ticket" style="max-width:min(480px, 94vw);">
+        <div class="ticket-head">
+          <div class="day-eyebrow">Box Office</div>
+          <div class="day-title">Bookings</div>
+          <div class="day-date">Confirmations &amp; Tickets</div>
+        </div>
+        <div class="acts">
+          <div class="act" style="flex-direction:column;">
+            <div class="act-body" style="margin-bottom:10px;">
+              <b>Oracle: A Mind... — Judah Mantell</b>
+              <span>Reverie Room, 163 W 72nd St FL 2 · Wed Aug 26, doors 6:30pm, show 7:00pm · Table Seating</span>
+            </div>
+            <div class="qr-row">
+              <div class="qr-card">
+                <img src="qr1.png" alt="Judah Mantell ticket 1 QR code">
+                <span>Cris · Ticket 1/2</span>
+              </div>
+              <div class="qr-card">
+                <img src="qr2.png" alt="Judah Mantell ticket 2 QR code">
+                <span>Caroline · Ticket 2/2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="perf"></div>
+        <div class="acts">
+          <div class="act">
+            <div class="act-time">Thu</div>
+            <div class="act-body">
+              <b>Circle Line — Harbor Lights</b>
+              <span>Pier 83, Midtown · Aug 27, 7:00pm · 2 hrs · Order CL-1785552153-c2be · Standard Ticket</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="act-time">Fri</div>
+            <div class="act-body">
+              <b>Peloton Studios NYC</b>
+              <span>370 10th Ave, Studio 1 · Aug 28, 10:00am · 30-min ride · Invoice #190997, paid in full</span>
+            </div>
+          </div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-foot"><span class="stub-note">Keep This Page Handy At The Door</span></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -569,13 +644,14 @@
     <div class="dot" data-i="2" onclick="go(2)"></div>
     <div class="dot" data-i="3" onclick="go(3)"></div>
     <div class="dot" data-i="4" onclick="go(4)"></div>
+    <div class="dot" data-i="5" onclick="go(5)"></div>
   </div>
   <div class="arrow" onclick="go(current+1)">›</div>
 </div>
 
 <script>
   let current = 0;
-  const total = 5;
+  const total = 6;
   function go(n){
     if(n<0) n=0;
     if(n>total-1) n=total-1;
