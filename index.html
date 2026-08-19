@@ -313,6 +313,51 @@
     justify-content:center;
     flex-wrap:wrap;
   }
+
+  .howto{
+    margin-top:8px;
+    border:1px solid rgba(34,31,27,.15);
+    border-radius:4px;
+    background:rgba(192,36,58,.03);
+  }
+  .howto summary{
+    list-style:none;
+    cursor:pointer;
+    padding:9px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--marquee-red);
+  }
+  .howto summary::-webkit-details-marker{display:none;}
+  .howto summary::after{
+    content:"+";
+    font-size:14px;
+    font-weight:600;
+    transition:transform .2s ease;
+  }
+  .howto[open] summary::after{
+    transform:rotate(45deg);
+  }
+  .howto-body{
+    padding:2px 14px 12px;
+    border-top:1px dashed rgba(34,31,27,.15);
+  }
+  .howto-body ol{
+    margin:8px 0 0 18px;
+    padding:0;
+  }
+  .howto-body li{
+    font-size:12.5px;
+    color:var(--charcoal-soft);
+    line-height:1.55;
+    margin-bottom:7px;
+  }
+  .howto-body li b{color:var(--charcoal);}
   .qr-card{
     display:flex;
     flex-direction:column;
@@ -381,6 +426,19 @@
             <div class="act-body">
               <b>Touch Down, EWR</b>
               <span>AirTrain → NJ Transit → Penn Station, arriving roughly 12:00–12:15pm.</span>
+              <details class="howto">
+                <summary>How to get the train</summary>
+                <div class="howto-body">
+                  <ol>
+                    <li>Follow signs for <b>AirTrain</b> at your terminal ("Rail Station / NJ Transit"). It runs continuously — no need to time it.</li>
+                    <li>Ride to the <b>Newark Liberty Airport Rail Station</b> stop.</li>
+                    <li>Buy an NJ Transit ticket at a vending machine or the <b>NJ Transit app</b> (app avoids a $5 surcharge). AirTrain fee is included.</li>
+                    <li>Board any <b>Northeast Corridor or North Jersey Coast Line</b> train toward <b>New York Penn Station</b>.</li>
+                    <li>Ride is about 30 minutes. Keep your ticket — you'll show it again at the AirTrain gate.</li>
+                    <li>Arrive at Penn Station (31st &amp; 8th Ave) — short walk or cab to the Doubletree.</li>
+                  </ol>
+                </div>
+              </details>
             </div>
           </div>
           <div class="act">
@@ -566,6 +624,18 @@
             <div class="act-body">
               <b>NJ Transit → EWR</b>
               <span>AirTrain to terminal, aiming to land by 3:30–4:00pm.</span>
+              <details class="howto">
+                <summary>How to get the train</summary>
+                <div class="howto-body">
+                  <ol>
+                    <li>At <b>Penn Station</b>, buy an NJ Transit ticket at a vending machine or the <b>NJ Transit app</b> — look for a train marked "EWR" or with an airplane icon.</li>
+                    <li>Board a <b>Northeast Corridor or North Jersey Coast Line</b> train toward Newark / Trenton that stops at the airport.</li>
+                    <li>Ride is about 30 minutes to the <b>Newark Liberty Airport Rail Station</b>. Keep your ticket — you'll show it again to board the AirTrain.</li>
+                    <li>Follow signs for <b>AirTrain</b> and ride to your terminal. Allow 15–20 minutes for this last leg.</li>
+                    <li>Budget the full trip (Penn Station to terminal) at roughly 60–75 minutes door to door.</li>
+                  </ol>
+                </div>
+              </details>
             </div>
           </div>
           <div class="act">
